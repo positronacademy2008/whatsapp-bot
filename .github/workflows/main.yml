@@ -1,0 +1,30 @@
+name: Positron WhatsApp Only Bot
+
+on:
+  workflow_dispatch: # Manual button ke liye
+  schedule:
+    - cron: '30 1 * * *' # Subah 7:00 AM IST
+    - cron: '30 12 * * *' # Shaam 6:00 PM IST
+
+jobs:
+  whatsapp-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests selenium webdriver-manager
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Run WhatsApp Bot
+        env:
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        run: python whatsapp_jugaad.py
